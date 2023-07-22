@@ -42,7 +42,7 @@ public class ExcelRead {
 
                 for (int j = startRow; j < numOfRows; j++) {
                     row = sheet.getRow(j);
-                    if(sheet.getRow(j).getCell(2) != null && row != null){
+                    if(row != null){
                         numOfCells = row.getLastCellNum();
                         map = new HashMap<>();
 
