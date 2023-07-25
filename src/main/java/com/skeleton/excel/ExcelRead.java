@@ -1,13 +1,11 @@
 package com.skeleton.excel;
 
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,44 +16,37 @@ public class ExcelRead {
             Workbook wb = ExcelFileType.getWorkbook(excelReadOption.getFilePath());
             final int sheetNum = wb.getNumberOfSheets();
 
-            Row row = null; // row
-            Cell cell = null;
-            String cellName = "";
-            int numOfCells = 0;
-
-            Map<String, String> map = null;
             List<Map<String, String>> result = new ArrayList<>();
 
             for (int i = 0; i < sheetNum; i++) {
-                System.out.println("wb = " + wb.getSheetName(i));
                 Sheet sheet = wb.getSheetAt(i);
 
                 int numOfRows = sheet.getLastRowNum() + 1;
                 if(numOfRows <= 1) {
-                    map = new HashMap<>();
+                    Map<String, String> map = new HashMap<>();
                     map.put("errorMessage", "numOfRows 1이 반환되는 오류 발생(유효한 행이 없음)");
                     result.add(map);
                     return result;
                 }
 
-                int startRow = excelReadOption.getStartRow()-1;
+                final int startRow = excelReadOption.getStartRow()-1;
 
                 for (int j = startRow; j < numOfRows; j++) {
-                    row = sheet.getRow(j);
-                    if(row != null){
-                        numOfCells = row.getLastCellNum();
-                        map = new HashMap<>();
+                    Row row = sheet.getRow(j);
+                    if(row != null) {
+                        int numOfCells = row.getLastCellNum();
+                        Map<String, String> map = new HashMap<>();
 
                         for (int k = 0; k < numOfCells; k++) {
-                            cell = row.getCell(k);
+                            Cell cell = row.getCell(k);
 
                             if(cell == null) {
                                 continue;
                             } else {
-                                switch (cell.getCellType()){
+                                switch (cell.getCellType()) {
                                     case Cell.CELL_TYPE_NUMERIC: {
-                                        if (HSSFDateUtil.isCellDateFormatted(cell)) {
-                                            SimpleDateFormat formatter = new SimpleDateFormat("YYYY-MM-DD");
+                                        if (DateUtil.isCellDateFormatted(cell)) {
+                                            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                                             cell.setCellValue(formatter.format(cell.getDateCellValue()));
                                         } else {
                                             if ((String.valueOf(cell.getNumericCellValue())).contains(".0")) {
@@ -88,13 +79,11 @@ public class ExcelRead {
                                     }
                                 }
                             }
-                            cellName = ExcelCellRef.getName(cell, j);
-                            if(!excelReadOption.getOutputColumns().contains(cellName)){
-                                continue;
-                            }
+                            String cellName = ExcelCellRef.getName(cell, j);
                             map.put(cellName, ExcelCellRef.getValue(cell));
+                            map.put("successMessage", "불러오기 성공");
                         }
-                        map.put("successMessage", "불러오기 성공");
+
                         result.add(map);
                     } else {
                         break;
@@ -103,6 +92,6 @@ public class ExcelRead {
             }
             return result;
         }
-        return null;
+        return Collections.emptyList();
     }
 }
