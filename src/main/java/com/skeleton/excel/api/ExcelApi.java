@@ -1,11 +1,14 @@
 package com.skeleton.excel.api;
 
+import com.skeleton.board.service.BoardService;
 import com.skeleton.excel.service.ExcelService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.HashMap;
@@ -15,12 +18,19 @@ import java.util.Map;
 @RequestMapping("/api/excel")
 public class ExcelApi {
     private ExcelService excelService;
+    private BoardService boardService;
     @Autowired
-    public ExcelApi(ExcelService excelService) {
+    public ExcelApi(ExcelService excelService, BoardService boardService) {
         this.excelService = excelService;
+        this.boardService = boardService;
     }
 
-    @ResponseBody
+    @GetMapping("/excelDownload")
+    public ResponseEntity excelDownload(HttpServletResponse response) {
+        boardService.excelDownload(response);
+        return ResponseEntity.ok(null);
+    }
+
     @PostMapping("/upload.do")
     public Map<String, String> excelUploadAjax(MultipartHttpServletRequest request) throws Exception {
         Map<String, String> result = new HashMap<>();
