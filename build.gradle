@@ -20,6 +20,11 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok:1.18.26'
 	annotationProcessor 'org.projectlombok:lombok:1.18.26'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.apache.poi:poi:3.11'                // .xls 확장자
+	implementation 'org.apache.poi:poi-ooxml:3.11'          // .xlsx 확장자
+	implementation 'org.apache.poi:poi-ooxml-schemas:4.1.2'
+	implementation 'org.apache.poi:poi-contrib:3.6'
+	implementation 'org.apache.poi:poi-scratchpad:5.2.2'
 }
 
 tasks.named('test') {
