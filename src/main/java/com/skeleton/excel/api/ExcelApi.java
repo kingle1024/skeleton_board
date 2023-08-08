@@ -1,7 +1,5 @@
 package com.skeleton.excel.api;
 
-import com.skeleton.board.service.BoardService;
-import com.skeleton.board.vo.Board;
 import com.skeleton.excel.service.ExcelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
