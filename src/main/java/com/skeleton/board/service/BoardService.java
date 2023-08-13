@@ -12,8 +12,12 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class BoardService {
-    @Autowired
     BoardRepository boardRepository;
+
+    @Autowired
+    public BoardService(BoardRepository boardRepository) {
+        this.boardRepository = boardRepository;
+    }
 
     @Transactional
     public Board detail(long id){

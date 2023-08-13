@@ -20,8 +20,15 @@ import java.util.Map;
 
 @Service
 public class ExcelServiceImpl implements ExcelService{
-    @Autowired
     BoardRepository boardRepository;
+
+    @Autowired
+    public ExcelServiceImpl(BoardRepository boardRepository) {
+        this.boardRepository = boardRepository;
+    }
+
+
+
     @Override
     public void excelUpload(File destiFile) throws Exception {
         ExcelReadOption excelReadOption = new ExcelReadOption();
